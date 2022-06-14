@@ -1,26 +1,23 @@
 package org.littletear.zionomicon
 import zio._
-import zio.clock._
-import zio.duration._
-import zio.console._
 import scala.concurrent.{ExecutionContext, Future}
 //import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.StdIn
 
-object chapter1 extends App {
+object chapter1 extends ZIOAppDefault {
 
-  val goShopping: Task[Unit] = ZIO.effect(println("Going to the grocery store"))
+  val goShopping: Task[Unit] = ZIO.attempt(println("Going to the grocery store"))
   val goShoppingLater: ZIO[Any with Clock, Throwable, Unit] = goShopping.delay(1.hour)
 
 
-  override def run(args: List[String]): URIO[zio.ZEnv, ExitCode] = {
+  val run = {
     readIntOrRetry.provideLayer(Console.live).exitCode
     //goShopping.exitCode
   }
 
 
-  val readLine: Task[String] = ZIO.effect(StdIn.readLine())
-  def printLine(line:String): Task[Unit] = ZIO.effect(println(line))
+  val readLine: Task[String] = ZIO.attempt(StdIn.readLine())
+  def printLine(line:String): Task[Unit] = ZIO.attempt(println(line))
   val echo: ZIO[Any, Throwable, Unit] = readLine.flatMap(line => printLine(line))
 
   val echo2: ZIO[Any, Throwable, Unit] =
@@ -30,13 +27,13 @@ object chapter1 extends App {
   } yield ()
 
   val firstName =
-    ZIO.effect(StdIn.readLine("What is your first name?"))
+    ZIO.attempt(StdIn.readLine("What is your first name?"))
   val lastName =
-    ZIO.effect(StdIn.readLine("What is your last name"))
+    ZIO.attempt(StdIn.readLine("What is your last name"))
   val fullName = firstName.zipWith(lastName)((first,last) => println(s"$first $last"))
 
   val helloWorld =
-    ZIO.effect(print("hello, ")) *> ZIO.effect(print("World!\n"))
+    ZIO.attempt(print("hello, ")) *> ZIO.attempt(print("World!\n"))
 
   val printNumbers: ZIO[Any, Throwable, List[Unit]] =
     ZIO.foreach(List(1,2,3)) {n =>
@@ -53,8 +50,8 @@ object chapter1 extends App {
   val printWords: ZIO[Any, Throwable, List[Unit]] =
     ZIO.collectAll(prints)
 
-  val first: ZIO[Any,Nothing,Unit] = ZIO.effectTotal(println("Going to the grocery store"))
-  val second: UIO[Unit] = ZIO.effectTotal(println("Going to the grocery store"))
+  val first: ZIO[Any,Nothing,Unit] = ZIO.succeed(println("Going to the grocery store"))
+  val second: UIO[Unit] = ZIO.succeed(println("Going to the grocery store"))
 
 
 //  val goShoppingF: Future[Unit] = Future(println("Going to the grocery store"))
@@ -78,18 +75,18 @@ object chapter1 extends App {
 
   def goShoppingFuture(implicit ec: ExecutionContext): Future[Unit] = Future(println("Going to the grocery store"))
 
-  val goShoppingF = Task.fromFuture(implicit ec => goShoppingFuture(ec))
+  val goShoppingF = ZIO.fromFuture(implicit ec => goShoppingFuture(ec))
 
 
   val readInt:RIO[Console,Int] =
     for{
-      line <- console.getStrLn
-      int  <- ZIO.effect(line.toInt)
+      line <- Console.readLine
+      int  <- ZIO.attempt(line.toInt)
     } yield int
 
   lazy val readIntOrRetry:RIO[Console,Int] =
     readInt
-      .orElse(console.putStrLn("Please enter a valid integer")
+      .orElse(Console.printLine("Please enter a valid integer")
       .zipRight(readIntOrRetry))
 
 }
