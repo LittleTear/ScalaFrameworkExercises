@@ -4,7 +4,7 @@ import scala.concurrent.{ExecutionContext, Future}
 //import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.StdIn
 
-object chapter1 extends ZIOAppDefault {
+object Chapter1 extends ZIOAppDefault {
 
   val goShopping: Task[Unit] = ZIO.attempt(println("Going to the grocery store"))
   val goShoppingLater: ZIO[Any with Clock, Throwable, Unit] = goShopping.delay(1.hour)

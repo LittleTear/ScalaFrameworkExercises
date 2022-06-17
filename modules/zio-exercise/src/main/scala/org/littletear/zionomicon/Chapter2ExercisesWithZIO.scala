@@ -1,5 +1,7 @@
 package org.littletear.zionomicon
 import zio._
+
+import scala.io.BufferedSource
 object Chapter2ExercisesWithZIO {
 
   /**
@@ -8,9 +10,9 @@ object Chapter2ExercisesWithZIO {
    */
   object Exercise1 {
     def readFile(file: String): String = {
-      val source = scala.io.Source.fromFile(file)
+      val source: BufferedSource = scala.io.Source.fromFile(file)
 
-      try source.getLines.mkString
+      try source.getLines().mkString
       finally source.close()
     }
 
