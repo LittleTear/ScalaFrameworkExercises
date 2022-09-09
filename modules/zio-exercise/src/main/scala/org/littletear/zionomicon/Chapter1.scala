@@ -11,8 +11,9 @@ object Chapter1 extends ZIOAppDefault {
 
 
   val run = {
-    readIntOrRetry.provideLayer(Console.live).exitCode
+//    readIntOrRetry.provideLayer(Console.live).exitCode
     //goShopping.exitCode
+    ???
   }
 
 
@@ -88,7 +89,6 @@ object Chapter1 extends ZIOAppDefault {
     readInt
       .orElse(Console.printLine("Please enter a valid integer")
       .zipRight(readIntOrRetry))
-
 }
 
 

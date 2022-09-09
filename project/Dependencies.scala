@@ -2,7 +2,7 @@ import sbt._
 
 object Dependencies {
   object Version {
-    val zio = "2.0.0-RC6"
+    val zio = "2.0.0"
     val `zio-logging` = "0.5.14"
     val tapir = "0.19.4"
     val `akka-http` = "10.2.9"
@@ -21,6 +21,7 @@ object Dependencies {
     val `zio-schema` = "0.1.9"
     val `akka-http-session` = "0.6.1"
     val `smt-cacheable` = "0.5.2"
+    val http4sVersion = "0.23.13"
   }
 
   lazy val redis = "dev.zio" %% "zio-redis" % "0.0.0+381-86c20614-SNAPSHOT" // 实验性质的
@@ -51,7 +52,8 @@ object Dependencies {
     "dev.zio" %% "zio-test" % Version.zio % Test,
     "dev.zio" %% "zio-test-sbt" % Version.zio % Test,
     "dev.zio" %% "zio-crypto" % "0.0.0+92-5672c642-SNAPSHOT", // 实验性质的
-    redis
+    redis,
+    "dev.zio" %% "zio-interop-cats" % "3.3.0"
   )
 
   lazy val tapirDeps = Seq(
@@ -91,7 +93,14 @@ object Dependencies {
     "mysql" % "mysql-connector-java" % Version.mysql,
     "org.simplejavamail" % "simple-java-mail" % Version.`simple-java-mail`,
     "com.h2database" % "h2" % Version.h2 % Test,
-    "org.scalatest" %% "scalatest" % Version.scalaTest % Test
+    "org.scalatest" %% "scalatest" % Version.scalaTest % Test,
+    "com.github.tototoshi" %% "scala-csv" % "1.3.10",
+
+    "org.http4s" %% "http4s-dsl" % Version.http4sVersion,
+    "org.http4s" %% "http4s-ember-server" % Version.http4sVersion,
+    "org.http4s" %% "http4s-ember-client" % Version.http4sVersion,
+    "org.http4s" %% "http4s-circe" % Version.http4sVersion,
+    "org.http4s" %% "http4s-blaze-server" %  "0.23.12"
   )
 
   lazy val serverDeps: Seq[ModuleID] =

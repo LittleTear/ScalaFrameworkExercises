@@ -14,12 +14,12 @@ class ExampleSpec extends AnyFunSuite{
   }
 }
 
-class ExampleSpec2 extends AnyFunSuite {
-  val runtime: Runtime[Any] = Runtime.default
-  test("addition works") {
-    assert(runtime.unsafeRun(ZIO.succeed(1 + 1)) === 2 )
-  }
-}
+//class ExampleSpec2 extends AnyFunSuite {
+//  val runtime: Runtime[Any] = Runtime.default
+//  test("addition works") {
+//    assert(runtime.unsafeRun(ZIO.succeed(1 + 1)) === 2 )
+//  }
+//}
 
 class ExampleSpec3 extends  ZIOSpecDefault {
   def spec = suite("ExampleSpec3")(
